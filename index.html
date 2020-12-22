@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="jquery.js"></script>
+</head>
+<style>
+    #box{
+        width: 350px;
+        height: 350px;
+        border: 1px solid;
+        position: relative;
+    }
+    #scale{
+        background: rgba(239,227,37,0.4);
+        width: 70px;
+        height: 70px;
+        position: absolute;
+        cursor: move;
+    }
+    #lbox{
+        width: 400px;
+        height: 400px;
+        border: 1px solid;
+        float: left;
+        position: absolute;
+        left: 380px;
+        top: 0px;
+        background-image: url("img/0001.jpg");
+        background-repeat: no-repeat;
+    }
+
+</style>
+<body>
+<div id="box">
+    <div id="scale"></div>
+    <img src="img/001.jpg" height="350" width="350" id="p1"/>
+
+</div>
+<div id="lbox" style="display: block" >
+    <img src="img/0001.jpg" height="800" width="800"  id="p2"/>
+</div>
+<script>
+    function getLeftAndTops() {
+        var dx=e.pageX-$('#box').offset().left;
+        var dy=e.pageY-$('#box').offset().top;
+
+        var lefts=dx-$('#scale').outerWidth()/2;
+        var tops=dy-$('#scale').outerHeight()/2;
+
+        var maxLefts = $('#box').innerWidth()-$('#scale').outerWidth();
+        var maxTops= $('#box').innerHeight()-$('#scale').outerHeight();
+
+        if(lefts<=0){lefts=0}
+        if(lefts>=maxLefts){lefts=maxLefts}
+        if(tops<=0){tops=0}
+        if(tops>=maxTops){tops=maxTops}
+
+        return[lefts,tops]
+    }
+    $(function () {
+        var getx;
+        var gety;
+        var val=$("#p2").width()/$('#p1').width();
+
+//        $('#box').hover(function (e) {
+//            $('#scale').css("display","block");
+//            $('#lbox').css("display","block");
+//           var arr = getLeftAndTops(e)
+//
+//            $('#scale').css({left:arr[0]+'px',top:arr[1]+'px'})
+//
+//            $('#scale').mousemove(function (ev) {
+//                var arr = getLeftAndTops(ev);
+//                $('#scale').css({left:arr[0]+'px',top:arr[1]+'px'})
+//
+//
+//                var radiox=($('#p2').width()-$('#lbox').width())/($('#p1').width()-$('#box').width());
+//                var radioy=($('#p2').height()-$('#lbox').height())/($('#p1').height()-$('#box').height()
+//
+//                /*计算遮罩走的距离*/
+//                var maskLeftPos=$('#scale').position().left;
+//                var maskTopPos=$('#scale').position().top;
+//
+//
+//                /*大图片走动距离*/
+//                var binImageLeftPos=-(maskLeftPos*radiox);
+//                var binImageTopPos=-(maskTopPos*radioy);
+//                $('#p2').css({left:binImageLeftPos+'px',top:binImageTopPos+'px'})
+//
+//            });
+//
+//        },function () {
+//            $('#scale').css("display","none");
+//            $('#lbox').css("display","none");
+//        });
+
+        /*实现拖拽*/
+            $('#box').mousemove(function(event){
+            $('#scale').css({display:'block'});
+            $('#lbox').css({display:'block'});
+            var e=event;
+            getx=e.pageX;
+            gety=e.pageY;
+            getX=getx;
+            getY=gety;
+            $("#scale").css({'left':getx-35,'top':gety-35});
+            $('#lbox').css({backgroundPositionX:-val*getX+200+'px',backgroundPositionY:-val*getY+200+'px'});
+            if(getx-35<=0) {
+                $("#scale").css({'left': 0});
+            }
+            if(getx+35>=351){
+                $("#scale").css({'left':280});
+            }
+            if(gety-35<=0){
+                $("#scale").css({'top':0});
+
+            }
+            if(gety+35>=351){
+                $("#scale").css({'top':280});
+            }
+        });
+        $("#box").mouseout(function(e){
+                $('#scale').css({display:'none'});
+                $("#lbox").css({display:'none'});
+
+        })
+    })
+</script>
+</body>
+</html>
